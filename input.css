@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-inter;
+  }
+}
+
+@layer components {
+  .heart-shape {
+    @apply relative w-[100px] h-[90px] bg-heart-red transform -rotate-45 rounded-[10px] shadow-lg transition-all duration-500;
+  }
+  
+  .heart-shape::before,
+  .heart-shape::after {
+    content: "";
+    @apply absolute w-[100px] h-[90px] bg-heart-red rounded-full transition-all duration-500;
+  }
+  
+  .heart-shape::before {
+    @apply -top-[50px] left-0;
+  }
+  
+  .heart-shape::after {
+    @apply left-[50px] top-0;
+  }
+  
+  .heart-beat {
+    animation: heartbeat 0.6s ease-in-out;
+  }
+  
+  @keyframes heartbeat {
+    0% { transform: rotate(-45deg) scale(1); }
+    25% { transform: rotate(-45deg) scale(1.1); }
+    50% { transform: rotate(-45deg) scale(1); }
+    75% { transform: rotate(-45deg) scale(1.05); }
+    100% { transform: rotate(-45deg) scale(1); }
+  }
+  
+  .confetti {
+    @apply absolute w-2.5 h-2.5 rounded-full pointer-events-none;
+    animation: confetti-fall 2s forwards ease-out;
+  }
+  
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(0) rotateZ(0deg) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(500px) rotateZ(720deg) scale(0.5);
+      opacity: 0;
+    }
+  }
+  
+  .typewriter {
+    overflow: hidden;
+    border-right: 0.15em solid theme('colors.heart-red');
+    white-space: nowrap;
+    animation: typing 2s steps(20, end), blink-caret 0.75s step-end infinite;
+  }
+  
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: theme('colors.heart-red') }
+  }
+}
+
+@layer utilities {
+  .theme-pink {
+    --tw-gradient-from: theme('colors.theme-pink-start');
+    --tw-gradient-to: theme('colors.theme-pink-end');
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  
+  .theme-blue {
+    --tw-gradient-from: theme('colors.theme-blue-start');
+    --tw-gradient-to: theme('colors.theme-blue-end');
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  
+  .theme-green {
+    --tw-gradient-from: theme('colors.theme-green-start');
+    --tw-gradient-to: theme('colors.theme-green-end');
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+}

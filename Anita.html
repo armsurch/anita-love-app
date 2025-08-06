@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Unfolding Heart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="Anita/anita-advanced.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header glass-card">
+            <div class="header-content">
+                <h1 class="main-title">
+                    <span class="title-text">For My Dearest</span>
+                    <span class="title-name">Anita</span>
+                    <div class="title-hearts">💕✨</div>
+                </h1>
+                <div class="header-subtitle">Every moment with you is magical</div>
+            </div>
+        </header>
+
+        <!-- Interactive Heart Section -->
+        <section class="heart-section glass-card floating-card">
+            <div class="heart-container" id="heartWrapper">
+                <div class="heart-glow"></div>
+                <div class="heart" id="heart">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="heart-pulse"></div>
+            </div>
+            <p class="heart-instruction">Click the heart to feel the magic ✨</p>
+        </section>
+
+        <!-- Message Section -->
+        <section class="message-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-envelope-heart"></i> Sweet Messages</h2>
+            </div>
+            <div class="message-container">
+                <div id="message-display" class="message-display">
+                    <div class="message-icon">💌</div>
+                    <div class="message-text">Click the button below to see a special message!</div>
+                </div>
+                <button id="new-message-btn" class="message-btn modern-btn">
+                    <span class="btn-icon">✨</span>
+                    <span class="btn-text">New Sweet Message</span>
+                    <div class="btn-ripple"></div>
+                </button>
+            </div>
+        </section>
+
+        <!-- Photo Gallery Section -->
+        <section class="gallery-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-images"></i> Our Beautiful Memories</h2>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery-main">
+                    <div class="image-frame">
+                        <img id="gallery-main-image" src="Anita/ph1.jpg" alt="Our beautiful memories" class="main-image">
+                        <div class="image-overlay">
+                            <div class="image-controls">
+                                <button class="image-btn" id="prevImage"><i class="fas fa-chevron-left"></i></button>
+                                <button class="image-btn" id="nextImage"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-thumbnails" id="gallery-thumbnails">
+                    <!-- Thumbnails will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <!-- Days Counter -->
+                <div class="stat-card glass-card floating-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-heart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="daysCount">0</div>
+                        <div class="stat-label">Days Together</div>
+                    </div>
+                </div>
+
+                <!-- Messages Counter -->
+                <div class="stat-card glass-card floating-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="messagesCount">0</div>
+                        <div class="stat-label">Sweet Messages</div>
+                    </div>
+                </div>
+
+                <!-- Photos Counter -->
+                <div class="stat-card glass-card floating-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="photosCount">3</div>
+                        <div class="stat-label">Memories</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Games Section -->
+        <section class="games-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-gamepad"></i> Love Games</h2>
+            </div>
+            <div class="games-grid">
+                <div class="game-card" id="memoryGame">
+                    <div class="game-icon">🧠</div>
+                    <h4>Memory Match</h4>
+                    <p>Match our special moments!</p>
+                    <button class="game-btn">Play Now</button>
+                </div>
+                <div class="game-card" id="loveQuiz">
+                    <div class="game-icon">❤️</div>
+                    <h4>Love Quiz</h4>
+                    <p>How well do you know us?</p>
+                    <button class="game-btn">Start Quiz</button>
+                </div>
+                <div class="game-card" id="wishingWell">
+                    <div class="game-icon">🌟</div>
+                    <h4>Wishing Well</h4>
+                    <p>Make a wish together!</p>
+                    <button class="game-btn">Make Wish</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="timeline-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-heart-pulse"></i> Our Love Story</h2>
+            </div>
+            <div class="timeline-container" id="timelineContainer">
+                <!-- Timeline will be populated by JavaScript -->
+            </div>
+            <button id="addMilestone" class="modern-btn">
+                <span class="btn-icon">➕</span>
+                <span class="btn-text">Add Milestone</span>
+                <div class="btn-ripple"></div>
+            </button>
+        </section>
+
+        <!-- Digital Scrapbook -->
+        <section class="scrapbook-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-book-heart"></i> Digital Scrapbook</h2>
+            </div>
+            <div class="scrapbook-grid" id="scrapbookGrid">
+                <!-- Scrapbook items will be populated by JavaScript -->
+            </div>
+            <div class="scrapbook-controls">
+                <button id="addMemory" class="modern-btn">
+                    <span class="btn-icon">📝</span>
+                    <span class="btn-text">Add Memory</span>
+                    <div class="btn-ripple"></div>
+                </button>
+                <button id="exportScrapbook" class="modern-btn secondary">
+                    <span class="btn-icon">📤</span>
+                    <span class="btn-text">Export</span>
+                    <div class="btn-ripple"></div>
+                </button>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section class="achievements-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-trophy"></i> Love Achievements</h2>
+            </div>
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievements will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- AI Love Oracle Section -->
+        <section class="ai-oracle-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-crystal-ball"></i> AI Love Oracle</h2>
+            </div>
+            <div class="oracle-container">
+                <div class="oracle-crystal">
+                    <div class="crystal-glow"></div>
+                    <div class="crystal-core">🔮</div>
+                    <div class="crystal-particles"></div>
+                </div>
+                <div class="oracle-content">
+                    <div class="oracle-prediction" id="oraclePrediction">
+                        <div class="prediction-text">Ask the Love Oracle about your relationship...</div>
+                    </div>
+                    <div class="oracle-controls">
+                        <button id="askOracle" class="modern-btn oracle-btn">
+                            <span class="btn-icon">✨</span>
+                            <span class="btn-text">Ask Oracle</span>
+                            <div class="btn-ripple"></div>
+                        </button>
+                        <button id="relationshipInsights" class="modern-btn secondary">
+                            <span class="btn-icon">📊</span>
+                            <span class="btn-text">Get Insights</span>
+                            <div class="btn-ripple"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Smart Date Planner Section -->
+        <section class="date-planner-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-heart"></i> Smart Date Planner</h2>
+            </div>
+            <div class="planner-container">
+                <div class="weather-widget" id="weatherWidget">
+                    <div class="weather-icon">🌤️</div>
+                    <div class="weather-info">
+                        <div class="weather-temp">22°C</div>
+                        <div class="weather-desc">Perfect for romance</div>
+                    </div>
+                </div>
+                <div class="date-suggestions" id="dateSuggestions">
+                    <!-- AI-generated date ideas will appear here -->
+                </div>
+                <button id="generateDateIdea" class="modern-btn">
+                    <span class="btn-icon">💡</span>
+                    <span class="btn-text">Generate Date Idea</span>
+                    <div class="btn-ripple"></div>
+                </button>
+            </div>
+        </section>
+
+        <!-- 3D Heart Visualization -->
+        <section class="heart-3d-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-cube"></i> 3D Love Visualization</h2>
+            </div>
+            <div class="heart-3d-container">
+                <canvas id="heart3DCanvas" class="heart-3d-canvas"></canvas>
+                <div class="heart-3d-controls">
+                    <button id="heart3DAnimate" class="control-btn">
+                        <div class="control-icon"><i class="fas fa-play"></i></div>
+                        <div class="control-label">Animate</div>
+                    </button>
+                    <button id="heart3DColor" class="control-btn">
+                        <div class="control-icon"><i class="fas fa-palette"></i></div>
+                        <div class="control-label">Colors</div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Love Map -->
+        <section class="love-map-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-map-marked-alt"></i> Our Love Map</h2>
+            </div>
+            <div class="map-container">
+                <div class="love-map" id="loveMap">
+                    <div class="map-placeholder">
+                        <div class="map-icon">🗺️</div>
+                        <h3>Your Love Journey</h3>
+                        <p>Mark the special places where your love story unfolded</p>
+                    </div>
+                </div>
+                <div class="map-controls">
+                    <button id="addLocation" class="modern-btn">
+                        <span class="btn-icon">📍</span>
+                        <span class="btn-text">Add Location</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                    <button id="viewJourney" class="modern-btn secondary">
+                        <span class="btn-icon">🛤️</span>
+                        <span class="btn-text">View Journey</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Couple's Analytics Dashboard -->
+        <section class="analytics-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Relationship Analytics</h2>
+            </div>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="analytics-icon">📈</div>
+                    <div class="analytics-title">Love Score</div>
+                    <div class="analytics-value" id="loveScore">98%</div>
+                    <div class="analytics-trend">↗️ +2% this week</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">💬</div>
+                    <div class="analytics-title">Messages</div>
+                    <div class="analytics-value" id="messageAnalytics">0</div>
+                    <div class="analytics-trend">💕 Sweet & loving</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">🎯</div>
+                    <div class="analytics-title">Goals</div>
+                    <div class="analytics-value" id="goalsCompleted">3/5</div>
+                    <div class="analytics-trend">🌟 On track!</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="analytics-icon">😊</div>
+                    <div class="analytics-title">Mood</div>
+                    <div class="analytics-value" id="moodScore">Blissful</div>
+                    <div class="analytics-trend">💖 Perfect harmony</div>
+                </div>
+            </div>
+            <div class="mood-chart">
+                <canvas id="moodChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <!-- Dream Journal Section -->
+        <section class="dream-journal-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-moon"></i> Dream Journal</h2>
+            </div>
+            <div class="dream-container">
+                <div class="dream-input">
+                    <textarea id="dreamText" placeholder="Share your dreams about us..." rows="4"></textarea>
+                    <div class="dream-controls">
+                        <select id="dreamMood">
+                            <option value="romantic">💕 Romantic</option>
+                            <option value="adventurous">🌟 Adventurous</option>
+                            <option value="peaceful">😌 Peaceful</option>
+                            <option value="exciting">🎉 Exciting</option>
+                            <option value="magical">✨ Magical</option>
+                        </select>
+                        <button id="saveDream" class="modern-btn">
+                            <span class="btn-icon">💭</span>
+                            <span class="btn-text">Save Dream</span>
+                            <div class="btn-ripple"></div>
+                        </button>
+                    </div>
+                </div>
+                <div class="dreams-list" id="dreamsList">
+                    <!-- Dreams will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Smart Reminders Section -->
+        <section class="reminders-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-bell"></i> Smart Reminders</h2>
+            </div>
+            <div class="reminders-container">
+                <div class="upcoming-events" id="upcomingEvents">
+                    <!-- Upcoming events will be shown here -->
+                </div>
+                <div class="reminder-controls">
+                    <button id="addReminder" class="modern-btn">
+                        <span class="btn-icon">⏰</span>
+                        <span class="btn-text">Add Reminder</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                    <button id="viewCalendar" class="modern-btn secondary">
+                        <span class="btn-icon">📅</span>
+                        <span class="btn-text">View Calendar</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Media Section -->
+        <section class="media-section glass-card floating-card">
+            <div class="section-header">
+                <h2><i class="fas fa-photo-video"></i> Media Center</h2>
+            </div>
+            <div class="media-tabs">
+                <button class="media-tab active" data-tab="playlist">🎵 Playlist</button>
+                <button class="media-tab" data-tab="videos">🎥 Videos</button>
+                <button class="media-tab" data-tab="voice">🎤 Voice Notes</button>
+                <button class="media-tab" data-tab="aiart">🎨 AI Art</button>
+            </div>
+            <div class="media-content">
+                <div class="media-panel active" id="playlistPanel">
+                    <div class="playlist-container" id="playlistContainer">
+                        <!-- Playlist will be populated -->
+                    </div>
+                </div>
+                <div class="media-panel" id="videosPanel">
+                    <div class="video-gallery" id="videoGallery">
+                        <!-- Videos will be populated -->
+                    </div>
+                </div>
+                <div class="media-panel" id="voicePanel">
+                    <div class="voice-recorder">
+                        <button id="recordVoice" class="record-btn">
+                            <i class="fas fa-microphone"></i>
+                            <span>Record Message</span>
+                        </button>
+                        <div class="voice-notes" id="voiceNotes">
+                            <!-- Voice notes will be populated -->
+                        </div>
+                    </div>
+                </div>
+                <div class="media-panel" id="aiartPanel">
+                    <div class="ai-art-generator">
+                        <div class="art-prompt">
+                            <input type="text" id="artPrompt" placeholder="Describe romantic art to generate...">
+                            <button id="generateArt" class="modern-btn">
+                                <span class="btn-icon">🎨</span>
+                                <span class="btn-text">Generate Art</span>
+                                <div class="btn-ripple"></div>
+                            </button>
+                        </div>
+                        <div class="ai-art-gallery" id="aiArtGallery">
+                            <!-- Generated art will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls Section -->
+        <section class="controls-section">
+            <!-- Theme Selector -->
+            <div class="theme-selector glass-card floating-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-palette"></i> Choose Your Vibe</h3>
+                </div>
+                <div class="theme-grid">
+                    <div class="theme-option active" data-theme="pink">
+                        <div class="theme-preview pink-theme"></div>
+                        <span class="theme-name">Romantic</span>
+                    </div>
+                    <div class="theme-option" data-theme="blue">
+                        <div class="theme-preview blue-theme"></div>
+                        <span class="theme-name">Ocean</span>
+                    </div>
+                    <div class="theme-option" data-theme="green">
+                        <div class="theme-preview green-theme"></div>
+                        <span class="theme-name">Nature</span>
+                    </div>
+                    <div class="theme-option" data-theme="purple">
+                        <div class="theme-preview purple-theme"></div>
+                        <span class="theme-name">Mystic</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Music & Effects -->
+            <div class="media-controls glass-card floating-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-music"></i> Ambiance</h3>
+                </div>
+                <div class="controls-grid">
+                    <button id="musicToggle" class="control-btn">
+                        <div class="control-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="control-label">Music</div>
+                        <div class="control-status">Off</div>
+                    </button>
+                    <button id="particlesToggle" class="control-btn">
+                        <div class="control-icon">
+                            <i class="fas fa-sparkles"></i>
+                        </div>
+                        <div class="control-label">Effects</div>
+                        <div class="control-status">On</div>
+                    </button>
+                    <button id="shareApp" class="control-btn">
+                        <div class="control-icon">
+                            <i class="fas fa-share"></i>
+                        </div>
+                        <div class="control-label">Share</div>
+                        <div class="control-status">Ready</div>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Particle System -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
+
+    <!-- Modals -->
+    <div id="gameModal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">Game Title</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Game content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="milestoneModal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Add New Milestone</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="milestoneForm">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="milestoneDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="milestoneTitle" placeholder="Our first date..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="milestoneDescription" placeholder="Tell the story..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Icon</label>
+                        <select id="milestoneIcon">
+                            <option value="💕">💕 Love</option>
+                            <option value="🌹">🌹 Romance</option>
+                            <option value="🎉">🎉 Celebration</option>
+                            <option value="✈️">✈️ Travel</option>
+                            <option value="🏠">🏠 Home</option>
+                            <option value="💍">💍 Engagement</option>
+                            <option value="🎂">🎂 Birthday</option>
+                            <option value="🌟">🌟 Special</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="modern-btn">
+                        <span class="btn-text">Add Milestone</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="memoryModal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Add New Memory</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="memoryForm">
+                    <div class="form-group">
+                        <label>Memory Title</label>
+                        <input type="text" id="memoryTitle" placeholder="A beautiful moment..." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="memoryDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="memoryDescription" placeholder="Describe this special memory..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Photo (optional)</label>
+                        <input type="file" id="memoryPhoto" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>Mood</label>
+                        <select id="memoryMood">
+                            <option value="happy">😊 Happy</option>
+                            <option value="romantic">💕 Romantic</option>
+                            <option value="excited">🎉 Excited</option>
+                            <option value="peaceful">😌 Peaceful</option>
+                            <option value="adventurous">🌟 Adventurous</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="modern-btn">
+                        <span class="btn-text">Save Memory</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="anita-ultimate.js"></script>
+</body>
+</html>
