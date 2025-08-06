@@ -607,6 +607,25 @@
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
-    <script src="anita-ultimate.js"></script>
+    <!-- Full-stack version for modern browsers -->
+    <script>
+        // Feature detection and progressive enhancement
+        var supportsModernJS = (function() {
+            try {
+                eval('const x = 1; let y = 2; () => true; `template`;');
+                return typeof Promise !== 'undefined' && typeof fetch !== 'undefined';
+            } catch(e) {
+                return false;
+            }
+        })();
+        
+        if (supportsModernJS) {
+            console.log('🚀 Loading full-stack version for modern browser');
+            document.write('<script src="anita-fullstack.js"><\/script>');
+        } else {
+            console.log('🔧 Loading compatible version for older browser');
+            document.write('<script src="anita-compatible.js"><\/script>');
+        }
+    </script>
 </body>
 </html>

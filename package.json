@@ -1,20 +1,49 @@
 {
-  "name": "anita-pa",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "name": "anita-pa-fullstack",
+  "version": "2.0.0",
+  "description": "Ultimate Full-Stack Romantic Web Application with Cloud Features",
+  "main": "Anita.html",
   "scripts": {
+    "start": "node server.js",
     "dev": "node server.js",
     "build-css": "tailwindcss -i ./input.css -o ./Anita/styles.css --watch",
-    "build": "tailwindcss -i ./input.css -o ./Anita/styles.css"
+    "build": "tailwindcss -i ./input.css -o ./Anita/styles.css",
+    "deploy": "echo 'Deploy to Netlify'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "romantic",
+    "love",
+    "relationship",
+    "fullstack",
+    "netlify",
+    "cloud",
+    "ai",
+    "chat",
+    "analytics"
+  ],
+  "author": "Romantic Developer",
+  "license": "MIT",
   "dependencies": {
     "autoprefixer": "^10.4.21",
     "express": "^5.1.0",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.1.11",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^2.6.7",
+    "ws": "^8.14.2",
+    "formidable": "^3.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/anita-pa-romantic-app.git"
+  },
+  "homepage": "https://your-app-name.netlify.app",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "netlify": {
+    "functions": ".netlify/functions",
+    "publish": "."
   }
 }

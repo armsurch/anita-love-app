@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Compatibility Test - Anita PA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .test-item {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status {
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        .pass { background: #2ed573; color: white; }
+        .fail { background: #ff4757; color: white; }
+        .warn { background: #ffa726; color: white; }
+        
+        .details {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #333;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Browser Compatibility Test</h1>
+        <p>Testing browser support for full-stack romantic app features</p>
+        
+        <div id="test-results">
+            <!-- Results will be populated here -->
+        </div>
+        
+        <button onclick="runCompatibilityTests()">🧪 Run Tests</button>
+        <button onclick="loadFullStackApp()">🚀 Load Full-Stack App</button>
+        
+        <div id="app-status" style="margin-top: 2rem;">
+            <!-- App loading status -->
+        </div>
+    </div>
+
+    <script>
+        function runCompatibilityTests() {
+            const resultsDiv = document.getElementById('test-results');
+            const tests = [];
+            
+            // Test 1: Basic JavaScript
+            tests.push({
+                name: 'Basic JavaScript',
+                test: () => typeof Array !== 'undefined' && typeof Object !== 'undefined',
+                details: 'Core JavaScript objects available'
+            });
+            
+            // Test 2: ES5 Features
+            tests.push({
+                name: 'ES5 Features',
+                test: () => {
+                    try {
+                        return Array.prototype.forEach && JSON.parse && JSON.stringify;
+                    } catch(e) { return false; }
+                },
+                details: 'Array methods, JSON support'
+            });
+            
+            // Test 3: ES6 Features
+            tests.push({
+                name: 'ES6 Features',
+                test: () => {
+                    try {
+                        eval('const x = 1; let y = 2;');
+                        eval('() => true');
+                        eval('`template`');
+                        return true;
+                    } catch(e) { return false; }
+                },
+                details: 'const/let, arrow functions, template literals'
+            });
+            
+            // Test 4: Promise Support
+            tests.push({
+                name: 'Promise Support',
+                test: () => typeof Promise !== 'undefined',
+                details: 'Native Promise implementation'
+            });
+            
+            // Test 5: Async/Await
+            tests.push({
+                name: 'Async/Await',
+                test: () => {
+                    try {
+                        eval('(async () => {})');
+                        return true;
+                    } catch(e) { return false; }
+                },
+                details: 'Modern async programming support'
+            });
+            
+            // Test 6: Fetch API
+            tests.push({
+                name: 'Fetch API',
+                test: () => typeof fetch !== 'undefined',
+                details: 'Modern HTTP request API'
+            });
+            
+            // Test 7: Local Storage
+            tests.push({
+                name: 'Local Storage',
+                test: () => {
+                    try {
+                        return typeof localStorage !== 'undefined' && 
+                               localStorage.setItem && localStorage.getItem;
+                    } catch(e) { return false; }
+                },
+                details: 'Browser storage for user data'
+            });
+            
+            // Test 8: DOM Manipulation
+            tests.push({
+                name: 'DOM Manipulation',
+                test: () => {
+                    try {
+                        const div = document.createElement('div');
+                        div.innerHTML = '<span>test</span>';
+                        return div.querySelector('span') !== null;
+                    } catch(e) { return false; }
+                },
+                details: 'Dynamic HTML manipulation'
+            });
+            
+            // Test 9: CSS3 Support
+            tests.push({
+                name: 'CSS3 Support',
+                test: () => {
+                    const div = document.createElement('div');
+                    return 'transform' in div.style || 'webkitTransform' in div.style;
+                },
+                details: 'Modern CSS animations and effects'
+            });
+            
+            // Test 10: WebSocket Support
+            tests.push({
+                name: 'WebSocket Support',
+                test: () => typeof WebSocket !== 'undefined',
+                details: 'Real-time communication (optional)'
+            });
+            
+            // Run tests and display results
+            let html = '<h2>🧪 Test Results</h2>';
+            let passCount = 0;
+            
+            tests.forEach(({ name, test, details }) => {
+                const passed = test();
+                if (passed) passCount++;
+                
+                html += `
+                    <div class="test-item">
+                        <div>
+                            <strong>${name}</strong>
+                            <div class="details">${details}</div>
+                        </div>
+                        <div class="status ${passed ? 'pass' : 'fail'}">
+                            ${passed ? '✅ PASS' : '❌ FAIL'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const percentage = Math.round((passCount / tests.length) * 100);
+            let compatibilityLevel = 'Poor';
+            if (percentage >= 90) compatibilityLevel = 'Excellent';
+            else if (percentage >= 75) compatibilityLevel = 'Good';
+            else if (percentage >= 60) compatibilityLevel = 'Fair';
+            
+            html += `
+                <div class="test-item" style="background: rgba(255,255,255,0.2); margin-top: 2rem;">
+                    <div>
+                        <strong>Overall Compatibility</strong>
+                        <div class="details">${passCount}/${tests.length} tests passed</div>
+                    </div>
+                    <div class="status ${percentage >= 75 ? 'pass' : percentage >= 50 ? 'warn' : 'fail'}">
+                        ${percentage}% - ${compatibilityLevel}
+                    </div>
+                </div>
+            `;
+            
+            if (percentage >= 75) {
+                html += `
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(46, 213, 115, 0.2); border-radius: 10px;">
+                        🎉 <strong>Great news!</strong> Your browser supports the full-stack romantic app!
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255, 71, 87, 0.2); border-radius: 10px;">
+                        ⚠️ <strong>Limited support.</strong> Some features may not work properly. Consider updating your browser.
+                    </div>
+                `;
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        function loadFullStackApp() {
+            const statusDiv = document.getElementById('app-status');
+            statusDiv.innerHTML = '<p>🔄 Loading full-stack romantic app...</p>';
+            
+            // Create script element to load the app
+            const script = document.createElement('script');
+            script.src = 'anita-fullstack.js';
+            script.onload = () => {
+                statusDiv.innerHTML = `
+                    <div style="background: rgba(46, 213, 115, 0.2); padding: 1rem; border-radius: 10px;">
+                        ✅ <strong>Full-stack app loaded successfully!</strong><br>
+                        RomanticApp available: ${typeof RomanticApp !== 'undefined' ? 'Yes' : 'No'}<br>
+                        App instance: ${typeof window.app !== 'undefined' ? 'Yes' : 'No'}
+                    </div>
+                `;
+            };
+            script.onerror = () => {
+                statusDiv.innerHTML = `
+                    <div style="background: rgba(255, 71, 87, 0.2); padding: 1rem; border-radius: 10px;">
+                        ❌ <strong>Failed to load full-stack app</strong><br>
+                        Check if anita-fullstack.js exists in the same directory.
+                    </div>
+                `;
+            };
+            
+            document.head.appendChild(script);
+        }
+        
+        // Auto-run compatibility tests on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(runCompatibilityTests, 500);
+        });
+    </script>
+</body>
+</html>
