@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎛️ Panel Controls Demo</title>
+    <link rel="stylesheet" href="panel-controls.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .demo-instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-instructions h3 {
+            color: #ffd700;
+            margin-top: 0;
+        }
+        
+        .demo-instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .demo-instructions li {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .enable-button {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #333;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .enable-button:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🎛️ Minimizable Panel Controls Demo</h1>
+            <p>Test the minimize/maximize functionality for Chat, Cloud Storage, and Analytics panels</p>
+        </div>
+        
+        <div class="demo-instructions">
+            <h3>🎮 How to Use Panel Controls</h3>
+            <ul>
+                <li>🔽 <strong>Minimize Button (−):</strong> Click to collapse panel content</li>
+                <li>🔼 <strong>Maximize Button (+):</strong> Click to expand panel content</li>
+                <li>❌ <strong>Close Button (×):</strong> Click to hide panel completely</li>
+                <li>📉 <strong>Minimize All:</strong> Use left sidebar shortcut</li>
+                <li>📈 <strong>Maximize All:</strong> Use left sidebar shortcut</li>
+                <li>🔄 <strong>Reset Layout:</strong> Use left sidebar shortcut</li>
+                <li>👁️ <strong>Toggle Visibility:</strong> Use left sidebar shortcut</li>
+            </ul>
+        </div>
+        
+        <div style="text-align: center; margin: 2rem 0;">
+            <button class="enable-button" onclick="enableAllPanels()">🚀 Enable All Panels</button>
+            <button class="enable-button" onclick="enableChatOnly()">💬 Chat Only</button>
+            <button class="enable-button" onclick="enableCloudOnly()">☁️ Cloud Only</button>
+            <button class="enable-button" onclick="enableAnalyticsOnly()">📊 Analytics Only</button>
+        </div>
+    </div>
+
+    <!-- Panel Management Shortcuts -->
+    <div class="panel-shortcuts">
+        <button class="shortcut-btn" onclick="minimizeAllPanels()" title="Minimize All Panels">
+            📉
+        </button>
+        <button class="shortcut-btn" onclick="maximizeAllPanels()" title="Maximize All Panels">
+            📈
+        </button>
+        <button class="shortcut-btn" onclick="resetPanelLayout()" title="Reset Panel Layout">
+            🔄
+        </button>
+        <button class="shortcut-btn" onclick="togglePanelVisibility()" title="Toggle All Panels">
+            👁️
+        </button>
+    </div>
+
+    <!-- Demo Panels -->
+    <div id="cloud-panel" class="cloud-panel minimizable-panel" style="display: none;">
+        <div class="panel-header cloud-header">
+            <div class="panel-title">
+                <h3>☁️ Cloud Storage</h3>
+                <div class="cloud-stats">
+                    <span id="storage-used">2.4 MB</span> / <span id="storage-limit">10 GB</span>
+                </div>
+            </div>
+            <div class="panel-controls">
+                <button class="minimize-btn" onclick="togglePanel('cloud-panel')" title="Minimize/Maximize">
+                    <span class="minimize-icon">−</span>
+                </button>
+                <button class="close-btn" onclick="closePanel('cloud-panel')" title="Close">
+                    ×
+                </button>
+            </div>
+        </div>
+        
+        <div class="panel-content cloud-content">
+            <div class="cloud-features">
+                <button class="cloud-button">📸 Upload Photo</button>
+                <button class="cloud-button">🔄 Sync Data</button>
+                <button class="cloud-button">🖼️ Cloud Gallery</button>
+            </div>
+            
+            <div class="cloud-status" id="cloud-status">
+                <span class="status-indicator online"></span>
+                <span>Connected</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-interface" class="chat-interface minimizable-panel" style="display: none;">
+        <div class="panel-header chat-header">
+            <div class="panel-title">
+                <h3>💬 Real-Time Chat</h3>
+                <div class="chat-status">
+                    <span class="status-indicator online" id="chat-status"></span>
+                    <span id="chat-status-text">Connected</span>
+                </div>
+            </div>
+            <div class="panel-controls">
+                <button class="minimize-btn" onclick="togglePanel('chat-interface')" title="Minimize/Maximize">
+                    <span class="minimize-icon">−</span>
+                </button>
+                <button class="close-btn" onclick="closePanel('chat-interface')" title="Close">
+                    ×
+                </button>
+            </div>
+        </div>
+        
+        <div class="panel-content chat-content">
+            <div class="chat-messages" id="chat-messages">
+                <div style="padding: 1rem; text-align: center; color: rgba(255,255,255,0.7);">
+                    💕 Start a romantic conversation...
+                </div>
+            </div>
+            
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Type a romantic message...">
+                <button>💕 Send</button>
+            </div>
+            
+            <div class="chat-features">
+                <button>💖 Romantic</button>
+                <button>🔮 Ask Oracle</button>
+                <button>📸 Share Photo</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="analytics-dashboard" class="analytics-dashboard minimizable-panel" style="display: none;">
+        <div class="panel-header dashboard-header">
+            <div class="panel-title">
+                <h3>📊 Relationship Analytics</h3>
+                <div class="dashboard-tabs">
+                    <button class="dashboard-tab active" data-report="overview">Overview</button>
+                    <button class="dashboard-tab" data-report="love">Love Score</button>
+                    <button class="dashboard-tab" data-report="engagement">Activity</button>
+                    <button class="dashboard-tab" data-report="photos">Photos</button>
+                </div>
+            </div>
+            <div class="panel-controls">
+                <button class="minimize-btn" onclick="togglePanel('analytics-dashboard')" title="Minimize/Maximize">
+                    <span class="minimize-icon">−</span>
+                </button>
+                <button class="close-btn" onclick="closePanel('analytics-dashboard')" title="Close">
+                    ×
+                </button>
+            </div>
+        </div>
+        
+        <div class="panel-content dashboard-content" id="dashboard-content">
+            <div style="padding: 1rem;">
+                <h4>💕 Love Score: 94/100</h4>
+                <p>📈 Relationship Health: Excellent</p>
+                <p>⏰ Time Together: 18h 32m</p>
+                <p>🎮 Favorite Activity: Photo Gallery</p>
+                <p>🌟 Growth Trend: +12% this week</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Panel control functions
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            const content = panel.querySelector('.panel-content');
+            const minimizeIcon = panel.querySelector('.minimize-icon');
+            
+            if (panel.classList.contains('minimized')) {
+                // Maximize
+                panel.classList.remove('minimized');
+                content.style.display = 'block';
+                minimizeIcon.textContent = '−';
+                console.log(`📈 ${panelId} maximized`);
+            } else {
+                // Minimize
+                panel.classList.add('minimized');
+                content.style.display = 'none';
+                minimizeIcon.textContent = '+';
+                console.log(`📉 ${panelId} minimized`);
+            }
+        }
+        
+        function closePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.style.display = 'none';
+                console.log(`❌ ${panelId} closed`);
+            }
+        }
+        
+        function showPanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.style.display = 'block';
+                panel.classList.remove('minimized');
+                const content = panel.querySelector('.panel-content');
+                const minimizeIcon = panel.querySelector('.minimize-icon');
+                
+                if (content) content.style.display = 'block';
+                if (minimizeIcon) minimizeIcon.textContent = '−';
+                
+                console.log(`✅ ${panelId} shown`);
+            }
+        }
+        
+        function minimizeAllPanels() {
+            const panels = document.querySelectorAll('.minimizable-panel');
+            panels.forEach(panel => {
+                if (!panel.classList.contains('minimized') && panel.style.display !== 'none') {
+                    togglePanel(panel.id);
+                }
+            });
+            console.log('📉 All panels minimized');
+        }
+        
+        function maximizeAllPanels() {
+            const panels = document.querySelectorAll('.minimizable-panel');
+            panels.forEach(panel => {
+                if (panel.classList.contains('minimized') && panel.style.display !== 'none') {
+                    togglePanel(panel.id);
+                }
+            });
+            console.log('📈 All panels maximized');
+        }
+        
+        function resetPanelLayout() {
+            const panels = document.querySelectorAll('.minimizable-panel');
+            panels.forEach(panel => {
+                panel.style.display = 'block';
+                panel.classList.remove('minimized');
+                const content = panel.querySelector('.panel-content');
+                const minimizeIcon = panel.querySelector('.minimize-icon');
+                
+                if (content) content.style.display = 'block';
+                if (minimizeIcon) minimizeIcon.textContent = '−';
+            });
+            console.log('🔄 Panel layout reset');
+        }
+        
+        function togglePanelVisibility() {
+            const panels = document.querySelectorAll('.minimizable-panel');
+            const anyVisible = Array.from(panels).some(panel => panel.style.display !== 'none');
+            
+            panels.forEach(panel => {
+                panel.style.display = anyVisible ? 'none' : 'block';
+            });
+            
+            console.log(`👁️ All panels ${anyVisible ? 'hidden' : 'shown'}`);
+        }
+        
+        // Demo functions
+        function enableAllPanels() {
+            showPanel('cloud-panel');
+            showPanel('chat-interface');
+            showPanel('analytics-dashboard');
+        }
+        
+        function enableChatOnly() {
+            showPanel('chat-interface');
+            closePanel('cloud-panel');
+            closePanel('analytics-dashboard');
+        }
+        
+        function enableCloudOnly() {
+            showPanel('cloud-panel');
+            closePanel('chat-interface');
+            closePanel('analytics-dashboard');
+        }
+        
+        function enableAnalyticsOnly() {
+            showPanel('analytics-dashboard');
+            closePanel('chat-interface');
+            closePanel('cloud-panel');
+        }
+        
+        // Console helpers
+        console.log('🎛️ Panel Controls Demo Ready!');
+        console.log('💡 Try these commands:');
+        console.log('   enableAllPanels()     - Show all panels');
+        console.log('   minimizeAllPanels()   - Minimize all panels');
+        console.log('   maximizeAllPanels()   - Maximize all panels');
+        console.log('   resetPanelLayout()    - Reset all panels');
+        console.log('   togglePanel("panel-id") - Toggle specific panel');
+    </script>
+</body>
+</html>

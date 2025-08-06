@@ -54,20 +54,266 @@ class RomanticApp {
         this.isOnline = navigator.onLine;
         this.websocket = null;
         
+        // 🎛️ Load feature configuration
+        this.config = window.ROMANTIC_APP_CONFIG || {
+            realTimeChat: false,
+            cloudStorage: false,
+            analytics: false,
+            userAuthentication: false,
+            aiOracle: true,
+            oracleRequiresLogin: false,
+            offlineMode: true,
+            showLoginModal: false
+        };
+        
+        console.log('🚀 Initializing Romantic App with features:', this.config);
         this.init();
     }
 
     async init() {
-        console.log('🚀 Initializing Full-Stack Romantic App...');
+        console.log('🚀 Initializing Romantic App...');
         
-        // Initialize all components
-        await this.initAuth();
-        await this.initRealTimeFeatures();
-        await this.initCloudStorage();
-        await this.initAnalytics();
+        // Initialize components based on configuration
+        if (this.config.userAuthentication) {
+            await this.initAuth();
+        } else {
+            console.log('🔓 Authentication disabled - running in guest mode');
+        }
+        
+        if (this.config.realTimeChat) {
+            await this.initRealTimeFeatures();
+        } else {
+            console.log('💬 Real-time chat disabled');
+        }
+        
+        if (this.config.cloudStorage) {
+            await this.initCloudStorage();
+        } else {
+            console.log('☁️ Cloud storage disabled');
+        }
+        
+        if (this.config.analytics) {
+            await this.initAnalytics();
+        } else {
+            console.log('📊 Analytics disabled');
+        }
+        
         await this.initUI();
         
-        console.log('✨ Full-Stack Romantic App Ready!');
+        // Load saved panel states
+        setTimeout(() => this.loadPanelStates(), 500);
+        
+        console.log('✨ Romantic App Ready with selected features!');
+        this.dispatchReadyEvent();
+    }
+    
+    // 🎛️ UPDATE FEATURES DYNAMICALLY
+    updateFeatures() {
+        console.log('🔄 Updating app features...', this.config);
+        
+        // Update UI visibility
+        this.updateUIVisibility();
+        
+        // Reinitialize features if needed
+        if (this.config.realTimeChat && !this.chatInitialized) {
+            this.initRealTimeFeatures();
+        }
+        
+        if (this.config.cloudStorage && !this.cloudInitialized) {
+            this.initCloudStorage();
+        }
+        
+        if (this.config.analytics && !this.analyticsInitialized) {
+            this.initAnalytics();
+        }
+        
+        console.log('✅ Features updated successfully!');
+    }
+    
+    // 🎨 UPDATE UI VISIBILITY
+    updateUIVisibility() {
+        // Hide/show chat interface
+        const chatElements = document.querySelectorAll('.chat-interface, .chat-button, #chat-panel');
+        chatElements.forEach(el => {
+            el.style.display = this.config.showChatButton ? 'block' : 'none';
+        });
+        
+        // Hide/show cloud storage panel
+        const cloudElements = document.querySelectorAll('.cloud-panel, .cloud-button, #cloud-storage');
+        cloudElements.forEach(el => {
+            el.style.display = this.config.showCloudPanel ? 'block' : 'none';
+        });
+        
+        // Hide/show analytics dashboard
+        const analyticsElements = document.querySelectorAll('.analytics-panel, .analytics-button, #analytics-dashboard');
+        analyticsElements.forEach(el => {
+            el.style.display = this.config.showAnalytics ? 'block' : 'none';
+        });
+        
+        // Hide/show login modal
+        if (!this.config.showLoginModal) {
+            const authModal = document.getElementById('auth-modal');
+            if (authModal) {
+                authModal.style.display = 'none';
+            }
+        }
+    }
+    
+    // 🎛️ PANEL CONTROL METHODS
+    togglePanel(panelId) {
+        const panel = document.getElementById(panelId);
+        const content = panel.querySelector('.panel-content');
+        const minimizeIcon = panel.querySelector('.minimize-icon');
+        
+        if (panel.classList.contains('minimized')) {
+            // Maximize
+            panel.classList.remove('minimized');
+            content.style.display = 'block';
+            minimizeIcon.textContent = '−';
+            console.log(`📈 ${panelId} maximized`);
+        } else {
+            // Minimize
+            panel.classList.add('minimized');
+            content.style.display = 'none';
+            minimizeIcon.textContent = '+';
+            console.log(`📉 ${panelId} minimized`);
+        }
+        
+        // Save panel state
+        this.savePanelState(panelId, !panel.classList.contains('minimized'));
+    }
+    
+    closePanel(panelId) {
+        const panel = document.getElementById(panelId);
+        if (panel) {
+            panel.style.display = 'none';
+            console.log(`❌ ${panelId} closed`);
+            
+            // Save panel state
+            this.savePanelState(panelId, false, true);
+        }
+    }
+    
+    showPanel(panelId) {
+        const panel = document.getElementById(panelId);
+        if (panel) {
+            panel.style.display = 'block';
+            panel.classList.remove('minimized');
+            const content = panel.querySelector('.panel-content');
+            const minimizeIcon = panel.querySelector('.minimize-icon');
+            
+            if (content) content.style.display = 'block';
+            if (minimizeIcon) minimizeIcon.textContent = '−';
+            
+            console.log(`✅ ${panelId} shown`);
+            
+            // Save panel state
+            this.savePanelState(panelId, true, false);
+        }
+    }
+    
+    savePanelState(panelId, isOpen, isClosed = false) {
+        const panelStates = JSON.parse(localStorage.getItem('panelStates') || '{}');
+        panelStates[panelId] = {
+            isOpen: isOpen,
+            isClosed: isClosed,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('panelStates', JSON.stringify(panelStates));
+    }
+    
+    loadPanelStates() {
+        const panelStates = JSON.parse(localStorage.getItem('panelStates') || '{}');
+        
+        Object.keys(panelStates).forEach(panelId => {
+            const state = panelStates[panelId];
+            const panel = document.getElementById(panelId);
+            
+            if (panel) {
+                if (state.isClosed) {
+                    panel.style.display = 'none';
+                } else if (!state.isOpen) {
+                    // Panel is minimized
+                    panel.classList.add('minimized');
+                    const content = panel.querySelector('.panel-content');
+                    const minimizeIcon = panel.querySelector('.minimize-icon');
+                    
+                    if (content) content.style.display = 'none';
+                    if (minimizeIcon) minimizeIcon.textContent = '+';
+                }
+            }
+        });
+    }
+    
+    // 🎮 PANEL MANAGEMENT SHORTCUTS
+    minimizeAllPanels() {
+        const panels = document.querySelectorAll('.minimizable-panel');
+        panels.forEach(panel => {
+            if (!panel.classList.contains('minimized')) {
+                this.togglePanel(panel.id);
+            }
+        });
+        console.log('📉 All panels minimized');
+    }
+    
+    maximizeAllPanels() {
+        const panels = document.querySelectorAll('.minimizable-panel');
+        panels.forEach(panel => {
+            if (panel.classList.contains('minimized')) {
+                this.togglePanel(panel.id);
+            }
+        });
+        console.log('📈 All panels maximized');
+    }
+    
+    resetPanelLayout() {
+        const panels = document.querySelectorAll('.minimizable-panel');
+        panels.forEach(panel => {
+            panel.style.display = 'block';
+            panel.classList.remove('minimized');
+            const content = panel.querySelector('.panel-content');
+            const minimizeIcon = panel.querySelector('.minimize-icon');
+            
+            if (content) content.style.display = 'block';
+            if (minimizeIcon) minimizeIcon.textContent = '−';
+        });
+        
+        localStorage.removeItem('panelStates');
+        console.log('🔄 Panel layout reset');
+    }
+    
+    // 🎮 CREATE PANEL SHORTCUTS
+    createPanelShortcuts() {
+        const shortcuts = document.createElement('div');
+        shortcuts.className = 'panel-shortcuts';
+        shortcuts.innerHTML = `
+            <button class="shortcut-btn" onclick="app.minimizeAllPanels()" title="Minimize All Panels">
+                📉
+            </button>
+            <button class="shortcut-btn" onclick="app.maximizeAllPanels()" title="Maximize All Panels">
+                📈
+            </button>
+            <button class="shortcut-btn" onclick="app.resetPanelLayout()" title="Reset Panel Layout">
+                🔄
+            </button>
+            <button class="shortcut-btn" onclick="app.togglePanelVisibility()" title="Toggle All Panels">
+                👁️
+            </button>
+        `;
+        
+        document.body.appendChild(shortcuts);
+    }
+    
+    // 👁️ TOGGLE ALL PANELS VISIBILITY
+    togglePanelVisibility() {
+        const panels = document.querySelectorAll('.minimizable-panel');
+        const anyVisible = Array.from(panels).some(panel => panel.style.display !== 'none');
+        
+        panels.forEach(panel => {
+            panel.style.display = anyVisible ? 'none' : 'block';
+        });
+        
+        console.log(`👁️ All panels ${anyVisible ? 'hidden' : 'shown'}`);
     }
 
     // 👥 AUTHENTICATION SYSTEM
@@ -78,10 +324,16 @@ class RomanticApp {
                 await this.loadUserProfile();
             } catch (error) {
                 console.log('Token expired, showing login');
-                this.showAuthModal();
+                if (this.config.showLoginModal) {
+                    this.showAuthModal();
+                }
             }
         } else {
-            this.showAuthModal();
+            if (this.config.showLoginModal) {
+                this.showAuthModal();
+            } else {
+                console.log('🔓 Running in guest mode - no login required');
+            }
         }
     }
 
@@ -305,6 +557,20 @@ class RomanticApp {
         try {
             this.showOracleThinking();
             
+            // Check if Oracle requires login
+            if (this.config.oracleRequiresLogin && !this.authToken) {
+                this.displayOraclePrediction(
+                    "🔮 Please sign in to unlock the full power of the Oracle! ✨",
+                    'Oracle Guardian'
+                );
+                return;
+            }
+            
+            // Use offline mode if configured
+            if (this.config.offlineMode || !this.config.useNetlifyFunctions) {
+                return this.getOfflineOraclePrediction(question);
+            }
+            
             const response = await fetch(`${this.apiBase}/ai-oracle`, {
                 method: 'POST',
                 headers: {
@@ -318,10 +584,14 @@ class RomanticApp {
             
             if (data.prediction) {
                 this.displayOraclePrediction(data.prediction, data.source);
-                await this.trackEvent('oracle_question', { question, hasContext: !!context });
                 
-                // Auto-send to chat if logged in
-                if (this.authToken) {
+                // Track event only if analytics enabled
+                if (this.config.analytics) {
+                    await this.trackEvent('oracle_question', { question, hasContext: !!context });
+                }
+                
+                // Auto-send to chat only if chat enabled and logged in
+                if (this.config.realTimeChat && this.authToken) {
                     await this.sendMessage(question, 'oracle-question');
                 }
             } else if (data.fallback) {
@@ -331,11 +601,33 @@ class RomanticApp {
             return data;
         } catch (error) {
             console.error('Oracle error:', error);
-            this.displayOraclePrediction(
-                "🌟 The cosmic energies are shifting. Try asking again in a moment, and the universe will provide guidance! ✨",
-                'Mystical Oracle'
-            );
+            // Fallback to offline prediction
+            return this.getOfflineOraclePrediction(question);
         }
+    }
+    
+    // 🔮 OFFLINE ORACLE PREDICTIONS
+    getOfflineOraclePrediction(question) {
+        const predictions = [
+            "🌟 The stars align beautifully for your love story. Trust in the magic that surrounds you both! ✨",
+            "💕 Your hearts are perfectly synchronized with the universe's rhythm. Beautiful moments await! 🎵",
+            "🌙 The cosmic energies whisper of deep connection and lasting happiness in your future! 💫",
+            "✨ Love flows through you like starlight - pure, bright, and eternal. Embrace this beautiful journey! 🌟",
+            "🦋 Like butterflies dancing in spring, your love brings joy and wonder to the world! 🌸",
+            "🌈 After every storm comes a rainbow - your love is that beautiful promise of hope! ☀️",
+            "💖 The universe celebrates your connection! Every moment together is a gift to cherish! 🎁",
+            "🕊️ Your love soars on wings of trust and understanding. Nothing can dim this beautiful light! ✨"
+        ];
+        
+        const randomPrediction = predictions[Math.floor(Math.random() * predictions.length)];
+        
+        this.displayOraclePrediction(randomPrediction, 'Mystical Oracle');
+        
+        return {
+            prediction: randomPrediction,
+            source: 'Mystical Oracle',
+            offline: true
+        };
     }
 
     // 📊 ADVANCED ANALYTICS
@@ -426,6 +718,9 @@ class RomanticApp {
         
         // Add enhanced controls
         this.createEnhancedControls();
+        
+        // Add panel management shortcuts
+        this.createPanelShortcuts();
     }
 
     createAuthModal() {
@@ -476,30 +771,42 @@ class RomanticApp {
     createCloudPanel() {
         const cloudPanel = document.createElement('div');
         cloudPanel.id = 'cloud-panel';
-        cloudPanel.className = 'cloud-panel';
+        cloudPanel.className = 'cloud-panel minimizable-panel';
         cloudPanel.innerHTML = `
-            <div class="cloud-header">
-                <h3>☁️ Cloud Storage</h3>
-                <div class="cloud-stats">
-                    <span id="storage-used">0 MB</span> / <span id="storage-limit">10 GB</span>
+            <div class="panel-header cloud-header">
+                <div class="panel-title">
+                    <h3>☁️ Cloud Storage</h3>
+                    <div class="cloud-stats">
+                        <span id="storage-used">0 MB</span> / <span id="storage-limit">10 GB</span>
+                    </div>
+                </div>
+                <div class="panel-controls">
+                    <button class="minimize-btn" onclick="app.togglePanel('cloud-panel')" title="Minimize/Maximize">
+                        <span class="minimize-icon">−</span>
+                    </button>
+                    <button class="close-btn" onclick="app.closePanel('cloud-panel')" title="Close">
+                        ×
+                    </button>
                 </div>
             </div>
             
-            <div class="cloud-features">
-                <button class="cloud-button" onclick="app.showUploadModal()">
-                    📸 Upload Photo
-                </button>
-                <button class="cloud-button" onclick="app.syncData()">
-                    🔄 Sync Data
-                </button>
-                <button class="cloud-button" onclick="app.showCloudGallery()">
-                    🖼️ Cloud Gallery
-                </button>
-            </div>
-            
-            <div class="cloud-status" id="cloud-status">
-                <span class="status-indicator online"></span>
-                <span>Connected</span>
+            <div class="panel-content cloud-content">
+                <div class="cloud-features">
+                    <button class="cloud-button" onclick="app.showUploadModal()">
+                        📸 Upload Photo
+                    </button>
+                    <button class="cloud-button" onclick="app.syncData()">
+                        🔄 Sync Data
+                    </button>
+                    <button class="cloud-button" onclick="app.showCloudGallery()">
+                        🖼️ Cloud Gallery
+                    </button>
+                </div>
+                
+                <div class="cloud-status" id="cloud-status">
+                    <span class="status-indicator online"></span>
+                    <span>Connected</span>
+                </div>
             </div>
         `;
         
@@ -511,29 +818,41 @@ class RomanticApp {
     createChatInterface() {
         const chatInterface = document.createElement('div');
         chatInterface.id = 'chat-interface';
-        chatInterface.className = 'chat-interface';
+        chatInterface.className = 'chat-interface minimizable-panel';
         chatInterface.innerHTML = `
-            <div class="chat-header">
-                <h3>💬 Real-Time Chat</h3>
-                <div class="chat-status">
-                    <span class="status-indicator" id="chat-status"></span>
-                    <span id="chat-status-text">Connecting...</span>
+            <div class="panel-header chat-header">
+                <div class="panel-title">
+                    <h3>💬 Real-Time Chat</h3>
+                    <div class="chat-status">
+                        <span class="status-indicator" id="chat-status"></span>
+                        <span id="chat-status-text">Connecting...</span>
+                    </div>
+                </div>
+                <div class="panel-controls">
+                    <button class="minimize-btn" onclick="app.togglePanel('chat-interface')" title="Minimize/Maximize">
+                        <span class="minimize-icon">−</span>
+                    </button>
+                    <button class="close-btn" onclick="app.closePanel('chat-interface')" title="Close">
+                        ×
+                    </button>
                 </div>
             </div>
             
-            <div class="chat-messages" id="chat-messages">
-                <!-- Messages will be populated here -->
-            </div>
-            
-            <div class="chat-input">
-                <input type="text" id="message-input" placeholder="Type a romantic message...">
-                <button onclick="app.sendChatMessage()">💕 Send</button>
-            </div>
-            
-            <div class="chat-features">
-                <button onclick="app.sendMessage('', 'romantic')">💖 Romantic</button>
-                <button onclick="app.askOracle(document.getElementById('message-input').value)">🔮 Ask Oracle</button>
-                <button onclick="app.sharePhoto()">📸 Share Photo</button>
+            <div class="panel-content chat-content">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will be populated here -->
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Type a romantic message...">
+                    <button onclick="app.sendChatMessage()">💕 Send</button>
+                </div>
+                
+                <div class="chat-features">
+                    <button onclick="app.sendMessage('', 'romantic')">💖 Romantic</button>
+                    <button onclick="app.askOracle(document.getElementById('message-input').value)">🔮 Ask Oracle</button>
+                    <button onclick="app.sharePhoto()">📸 Share Photo</button>
+                </div>
             </div>
         `;
         
@@ -544,19 +863,29 @@ class RomanticApp {
     createAnalyticsDashboard() {
         const dashboard = document.createElement('div');
         dashboard.id = 'analytics-dashboard';
-        dashboard.className = 'analytics-dashboard';
+        dashboard.className = 'analytics-dashboard minimizable-panel';
         dashboard.innerHTML = `
-            <div class="dashboard-header">
-                <h3>📊 Relationship Analytics</h3>
-                <div class="dashboard-tabs">
-                    <button class="dashboard-tab active" data-report="overview">Overview</button>
-                    <button class="dashboard-tab" data-report="love">Love Score</button>
-                    <button class="dashboard-tab" data-report="engagement">Activity</button>
-                    <button class="dashboard-tab" data-report="photos">Photos</button>
+            <div class="panel-header dashboard-header">
+                <div class="panel-title">
+                    <h3>📊 Relationship Analytics</h3>
+                    <div class="dashboard-tabs">
+                        <button class="dashboard-tab active" data-report="overview">Overview</button>
+                        <button class="dashboard-tab" data-report="love">Love Score</button>
+                        <button class="dashboard-tab" data-report="engagement">Activity</button>
+                        <button class="dashboard-tab" data-report="photos">Photos</button>
+                    </div>
+                </div>
+                <div class="panel-controls">
+                    <button class="minimize-btn" onclick="app.togglePanel('analytics-dashboard')" title="Minimize/Maximize">
+                        <span class="minimize-icon">−</span>
+                    </button>
+                    <button class="close-btn" onclick="app.closePanel('analytics-dashboard')" title="Close">
+                        ×
+                    </button>
                 </div>
             </div>
             
-            <div class="dashboard-content" id="dashboard-content">
+            <div class="panel-content dashboard-content" id="dashboard-content">
                 <!-- Analytics content will be populated here -->
             </div>
         `;

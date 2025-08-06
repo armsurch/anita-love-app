@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎛️ Feature Toggle Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .toggle-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b9d;
+        }
+        
+        .toggle-section h3 {
+            margin-top: 0;
+            color: #ffd700;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin: 0 10px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #ff6b9d;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .feature-description {
+            flex: 1;
+            margin-right: 1rem;
+        }
+        
+        .preset-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .preset-button {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #333;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        
+        .preset-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .status-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .success { color: #2ed573; }
+        .warning { color: #ffa726; }
+        .info { color: #74b9ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎛️ Romantic App Feature Control Panel</h1>
+        <p>Toggle features on/off without editing code!</p>
+        
+        <div class="toggle-section">
+            <h3>🚀 Quick Presets</h3>
+            <div class="preset-buttons">
+                <button class="preset-button" onclick="setMinimalMode()">🎯 Minimal Mode</button>
+                <button class="preset-button" onclick="setRomanticMode()">💕 Romantic Mode</button>
+                <button class="preset-button" onclick="setFullMode()">🚀 Full Mode</button>
+            </div>
+            <div class="status-display" id="preset-status">
+                <span class="info">Select a preset or toggle individual features below</span>
+            </div>
+        </div>
+        
+        <div class="toggle-section">
+            <h3>🔐 Authentication & Login</h3>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>User Authentication</strong><br>
+                    <small>Require users to login/register</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="userAuthentication" onchange="updateFeature('userAuthentication')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Show Login Modal</strong><br>
+                    <small>Display login popup on app start</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="showLoginModal" onchange="updateFeature('showLoginModal')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="toggle-section">
+            <h3>🤖 AI Features</h3>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>AI Oracle</strong><br>
+                    <small>Romantic predictions and guidance</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="aiOracle" checked onchange="updateFeature('aiOracle')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Oracle Requires Login</strong><br>
+                    <small>Force login to use Oracle</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="oracleRequiresLogin" onchange="updateFeature('oracleRequiresLogin')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="toggle-section">
+            <h3>💬 Communication Features</h3>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Real-Time Chat</strong><br>
+                    <small>Live messaging system</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="realTimeChat" onchange="updateFeature('realTimeChat')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Show Chat Button</strong><br>
+                    <small>Display chat interface</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="showChatButton" onchange="updateFeature('showChatButton')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="toggle-section">
+            <h3>☁️ Storage Features</h3>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Cloud Storage</strong><br>
+                    <small>Photo management and AI insights</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="cloudStorage" onchange="updateFeature('cloudStorage')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Show Cloud Panel</strong><br>
+                    <small>Display cloud storage interface</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="showCloudPanel" onchange="updateFeature('showCloudPanel')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="toggle-section">
+            <h3>📊 Analytics Features</h3>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Relationship Analytics</strong><br>
+                    <small>Track and analyze relationship data</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="analytics" onchange="updateFeature('analytics')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Show Analytics Dashboard</strong><br>
+                    <small>Display analytics interface</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="showAnalytics" onchange="updateFeature('showAnalytics')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="toggle-section">
+            <h3>🌐 Backend Integration</h3>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Use Netlify Functions</strong><br>
+                    <small>Connect to backend services</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="useNetlifyFunctions" onchange="updateFeature('useNetlifyFunctions')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="feature-item">
+                <div class="feature-description">
+                    <strong>Offline Mode</strong><br>
+                    <small>Work without internet connection</small>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="offlineMode" checked onchange="updateFeature('offlineMode')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="toggle-section">
+            <h3>📋 Current Configuration</h3>
+            <div class="status-display" id="config-display">
+                Loading configuration...
+            </div>
+            <button class="preset-button" onclick="saveConfiguration()">💾 Save Configuration</button>
+            <button class="preset-button" onclick="loadConfiguration()">📂 Load Configuration</button>
+            <button class="preset-button" onclick="resetToDefaults()">🔄 Reset to Defaults</button>
+        </div>
+    </div>
+
+    <script src="feature-config.js"></script>
+    <script>
+        // Initialize the UI with current configuration
+        function initializeUI() {
+            const config = window.ROMANTIC_APP_CONFIG;
+            
+            // Set all toggles based on current config
+            Object.keys(config).forEach(key => {
+                const toggle = document.getElementById(key);
+                if (toggle && typeof config[key] === 'boolean') {
+                    toggle.checked = config[key];
+                }
+            });
+            
+            updateConfigDisplay();
+        }
+        
+        // Update a single feature
+        function updateFeature(featureName) {
+            const toggle = document.getElementById(featureName);
+            if (toggle) {
+                window.ROMANTIC_APP_CONFIG[featureName] = toggle.checked;
+                
+                // Update related features
+                if (featureName === 'realTimeChat') {
+                    window.ROMANTIC_APP_CONFIG.showChatButton = toggle.checked;
+                    document.getElementById('showChatButton').checked = toggle.checked;
+                }
+                
+                if (featureName === 'cloudStorage') {
+                    window.ROMANTIC_APP_CONFIG.showCloudPanel = toggle.checked;
+                    document.getElementById('showCloudPanel').checked = toggle.checked;
+                }
+                
+                if (featureName === 'analytics') {
+                    window.ROMANTIC_APP_CONFIG.showAnalytics = toggle.checked;
+                    document.getElementById('showAnalytics').checked = toggle.checked;
+                }
+                
+                if (featureName === 'userAuthentication') {
+                    window.ROMANTIC_APP_CONFIG.showLoginModal = toggle.checked;
+                    window.ROMANTIC_APP_CONFIG.oracleRequiresLogin = toggle.checked;
+                    document.getElementById('showLoginModal').checked = toggle.checked;
+                    document.getElementById('oracleRequiresLogin').checked = toggle.checked;
+                }
+                
+                updateConfigDisplay();
+                
+                // Update the app if it's running
+                if (window.app && window.app.updateFeatures) {
+                    window.app.updateFeatures();
+                }
+                
+                console.log(`🎛️ ${featureName}: ${toggle.checked ? 'ON' : 'OFF'}`);
+            }
+        }
+        
+        // Preset functions with UI updates
+        function setMinimalMode() {
+            Object.assign(window.ROMANTIC_APP_CONFIG, window.ROMANTIC_APP_CONFIG.presets.minimal);
+            initializeUI();
+            document.getElementById('preset-status').innerHTML = '<span class="success">✅ Minimal Mode Active - Core romantic features only</span>';
+            if (window.app && window.app.updateFeatures) window.app.updateFeatures();
+        }
+        
+        function setRomanticMode() {
+            Object.assign(window.ROMANTIC_APP_CONFIG, window.ROMANTIC_APP_CONFIG.presets.romantic);
+            initializeUI();
+            document.getElementById('preset-status').innerHTML = '<span class="success">💕 Romantic Mode Active - Love and Oracle features</span>';
+            if (window.app && window.app.updateFeatures) window.app.updateFeatures();
+        }
+        
+        function setFullMode() {
+            Object.assign(window.ROMANTIC_APP_CONFIG, window.ROMANTIC_APP_CONFIG.presets.full);
+            initializeUI();
+            document.getElementById('preset-status').innerHTML = '<span class="success">🚀 Full Mode Active - All features enabled</span>';
+            if (window.app && window.app.updateFeatures) window.app.updateFeatures();
+        }
+        
+        // Configuration management
+        function updateConfigDisplay() {
+            const config = window.ROMANTIC_APP_CONFIG;
+            const display = document.getElementById('config-display');
+            
+            const enabledFeatures = Object.keys(config).filter(key => 
+                typeof config[key] === 'boolean' && config[key]
+            );
+            
+            display.innerHTML = `
+<span class="info">📊 Configuration Status:</span>
+<span class="success">✅ Enabled Features (${enabledFeatures.length}):</span>
+${enabledFeatures.map(feature => `  • ${feature}`).join('\n')}
+
+<span class="warning">⚠️ Disabled Features:</span>
+${Object.keys(config).filter(key => 
+    typeof config[key] === 'boolean' && !config[key]
+).map(feature => `  • ${feature}`).join('\n')}
+            `;
+        }
+        
+        function saveConfiguration() {
+            localStorage.setItem('romanticAppConfig', JSON.stringify(window.ROMANTIC_APP_CONFIG));
+            document.getElementById('preset-status').innerHTML = '<span class="success">💾 Configuration saved to browser storage</span>';
+        }
+        
+        function loadConfiguration() {
+            const saved = localStorage.getItem('romanticAppConfig');
+            if (saved) {
+                window.ROMANTIC_APP_CONFIG = JSON.parse(saved);
+                initializeUI();
+                document.getElementById('preset-status').innerHTML = '<span class="success">📂 Configuration loaded from browser storage</span>';
+                if (window.app && window.app.updateFeatures) window.app.updateFeatures();
+            } else {
+                document.getElementById('preset-status').innerHTML = '<span class="warning">⚠️ No saved configuration found</span>';
+            }
+        }
+        
+        function resetToDefaults() {
+            // Reset to minimal mode as default
+            setMinimalMode();
+            localStorage.removeItem('romanticAppConfig');
+            document.getElementById('preset-status').innerHTML = '<span class="info">🔄 Reset to default minimal configuration</span>';
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUI();
+            console.log('🎛️ Feature Toggle Control Panel Ready');
+        });
+    </script>
+</body>
+</html>

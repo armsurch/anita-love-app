@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Backend Functions Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            margin: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .function-test {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b9d;
+        }
+        
+        .function-test h3 {
+            margin-top: 0;
+            color: #ffd700;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: #333;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .test-result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .success { color: #2ed573; }
+        .error { color: #ff4757; }
+        .info { color: #ffa726; }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        .status-online { background: #2ed573; }
+        .status-offline { background: #ff4757; }
+        .status-testing { background: #ffa726; animation: pulse 1s infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Backend Functions Test Suite</h1>
+        <p>Test all 5 Netlify functions for your full-stack romantic app</p>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <h4>🤖 AI Oracle</h4>
+                <span id="oracle-status" class="status-indicator status-offline"></span>
+                <span id="oracle-text">Not Tested</span>
+            </div>
+            <div class="status-card">
+                <h4>🔐 User Auth</h4>
+                <span id="auth-status" class="status-indicator status-offline"></span>
+                <span id="auth-text">Not Tested</span>
+            </div>
+            <div class="status-card">
+                <h4>☁️ Cloud Storage</h4>
+                <span id="cloud-status" class="status-indicator status-offline"></span>
+                <span id="cloud-text">Not Tested</span>
+            </div>
+            <div class="status-card">
+                <h4>💬 Real-Time Chat</h4>
+                <span id="chat-status" class="status-indicator status-offline"></span>
+                <span id="chat-text">Not Tested</span>
+            </div>
+            <div class="status-card">
+                <h4>📊 Analytics</h4>
+                <span id="analytics-status" class="status-indicator status-offline"></span>
+                <span id="analytics-text">Not Tested</span>
+            </div>
+        </div>
+        
+        <div class="function-test">
+            <h3>🤖 AI Oracle Function</h3>
+            <p>Tests the enhanced AI Oracle with romantic predictions</p>
+            <button class="test-button" onclick="testAIOracle()">Test AI Oracle</button>
+            <div id="oracle-result" class="test-result"></div>
+        </div>
+        
+        <div class="function-test">
+            <h3>🔐 User Authentication Function</h3>
+            <p>Tests login, registration, and token validation</p>
+            <button class="test-button" onclick="testUserAuth()">Test Authentication</button>
+            <div id="auth-result" class="test-result"></div>
+        </div>
+        
+        <div class="function-test">
+            <h3>☁️ Cloud Storage Function</h3>
+            <p>Tests photo storage, metadata, and AI insights</p>
+            <button class="test-button" onclick="testCloudStorage()">Test Cloud Storage</button>
+            <div id="cloud-result" class="test-result"></div>
+        </div>
+        
+        <div class="function-test">
+            <h3>💬 Real-Time Chat Function</h3>
+            <p>Tests messaging, chat history, and AI responses</p>
+            <button class="test-button" onclick="testRealTimeChat()">Test Chat System</button>
+            <div id="chat-result" class="test-result"></div>
+        </div>
+        
+        <div class="function-test">
+            <h3>📊 Analytics Function</h3>
+            <p>Tests relationship analytics and insights</p>
+            <button class="test-button" onclick="testAnalytics()">Test Analytics</button>
+            <div id="analytics-result" class="test-result"></div>
+        </div>
+        
+        <div class="function-test">
+            <h3>🚀 Run All Tests</h3>
+            <p>Test all backend functions at once</p>
+            <button class="test-button" onclick="runAllTests()">Run Complete Test Suite</button>
+            <div id="all-results" class="test-result"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/.netlify/functions';
+        const LOCAL_MODE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        function updateStatus(functionName, status, text) {
+            const statusEl = document.getElementById(`${functionName}-status`);
+            const textEl = document.getElementById(`${functionName}-text`);
+            
+            statusEl.className = `status-indicator status-${status}`;
+            textEl.textContent = text;
+        }
+        
+        async function testAIOracle() {
+            const resultDiv = document.getElementById('oracle-result');
+            updateStatus('oracle', 'testing', 'Testing...');
+            resultDiv.innerHTML = '<span class="info">🔮 Testing AI Oracle function...</span>';
+            
+            try {
+                const testQuestion = "Will our love continue to grow stronger?";
+                const response = await fetch(`${API_BASE}/ai-oracle`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        question: testQuestion,
+                        context: { testMode: true }
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                updateStatus('oracle', 'online', 'Working');
+                resultDiv.innerHTML = `<span class="success">✅ AI Oracle Test PASSED</span>
+                
+📝 Test Question: "${testQuestion}"
+🔮 Oracle Response: ${data.prediction || data.fallback}
+📊 Source: ${data.source || 'AI Oracle'}
+⏰ Response Time: ${data.responseTime || 'N/A'}
+🎯 Confidence: ${data.confidence || 'High'}
+
+📋 Function Details:
+- Status: ${response.status} ${response.statusText}
+- Headers: ${JSON.stringify(Object.fromEntries(response.headers), null, 2)}
+- Data: ${JSON.stringify(data, null, 2)}`;
+                
+            } catch (error) {
+                updateStatus('oracle', 'offline', 'Failed');
+                resultDiv.innerHTML = `<span class="error">❌ AI Oracle Test FAILED</span>
+                
+🚨 Error Details:
+- Message: ${error.message}
+- Type: ${error.name}
+- Stack: ${error.stack}
+
+💡 Possible Issues:
+- Function not deployed yet
+- Network connectivity problem
+- Function code error
+- CORS configuration issue`;
+            }
+        }
+        
+        async function testUserAuth() {
+            const resultDiv = document.getElementById('auth-result');
+            updateStatus('auth', 'testing', 'Testing...');
+            resultDiv.innerHTML = '<span class="info">🔐 Testing User Authentication function...</span>';
+            
+            try {
+                // Test login endpoint
+                const response = await fetch(`${API_BASE}/user-auth`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        action: 'login',
+                        email: 'test@romantic.app',
+                        password: 'testpassword123'
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                updateStatus('auth', 'online', 'Working');
+                resultDiv.innerHTML = `<span class="success">✅ User Authentication Test PASSED</span>
+                
+📧 Test Email: test@romantic.app
+🔑 Authentication: ${data.success ? 'Successful' : 'Failed'}
+👤 User Data: ${data.user ? JSON.stringify(data.user, null, 2) : 'N/A'}
+🎫 Token Generated: ${data.tokens ? 'Yes' : 'No'}
+💕 Welcome Message: ${data.welcomeBack ? 'Yes' : 'No'}
+
+📋 Function Details:
+- Status: ${response.status} ${response.statusText}
+- Response: ${JSON.stringify(data, null, 2)}`;
+                
+            } catch (error) {
+                updateStatus('auth', 'offline', 'Failed');
+                resultDiv.innerHTML = `<span class="error">❌ User Authentication Test FAILED</span>
+                
+🚨 Error Details:
+- Message: ${error.message}
+- Type: ${error.name}
+
+💡 Possible Issues:
+- Function not deployed yet
+- Database connection issue
+- Authentication logic error`;
+            }
+        }
+        
+        async function testCloudStorage() {
+            const resultDiv = document.getElementById('cloud-result');
+            updateStatus('cloud', 'testing', 'Testing...');
+            resultDiv.innerHTML = '<span class="info">☁️ Testing Cloud Storage function...</span>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/cloud-storage`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                updateStatus('cloud', 'online', 'Working');
+                resultDiv.innerHTML = `<span class="success">✅ Cloud Storage Test PASSED</span>
+                
+📸 Photos Retrieved: ${data.photos ? data.photos.length : 0}
+💾 Storage Used: ${data.storageUsed || 'N/A'}
+📊 Storage Limit: ${data.storageLimit || 'N/A'}
+🤖 AI Features: ${data.features ? Object.keys(data.features).join(', ') : 'N/A'}
+
+📋 Sample Photo Data:
+${data.photos && data.photos[0] ? JSON.stringify(data.photos[0], null, 2) : 'No photos found'}
+
+📋 Function Details:
+- Status: ${response.status} ${response.statusText}
+- Total Count: ${data.totalCount || 0}`;
+                
+            } catch (error) {
+                updateStatus('cloud', 'offline', 'Failed');
+                resultDiv.innerHTML = `<span class="error">❌ Cloud Storage Test FAILED</span>
+                
+🚨 Error Details:
+- Message: ${error.message}
+- Type: ${error.name}
+
+💡 Possible Issues:
+- Function not deployed yet
+- Storage service unavailable
+- Permission issues`;
+            }
+        }
+        
+        async function testRealTimeChat() {
+            const resultDiv = document.getElementById('chat-result');
+            updateStatus('chat', 'testing', 'Testing...');
+            resultDiv.innerHTML = '<span class="info">💬 Testing Real-Time Chat function...</span>';
+            
+            try {
+                // Test getting chat history
+                const response = await fetch(`${API_BASE}/real-time-chat`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                updateStatus('chat', 'online', 'Working');
+                resultDiv.innerHTML = `<span class="success">✅ Real-Time Chat Test PASSED</span>
+                
+💬 Messages Retrieved: ${data.messages ? data.messages.length : 0}
+📨 Unread Count: ${data.unreadCount || 0}
+🔗 Connection Status: ${data.connectionStatus || 'Unknown'}
+🎮 Features: ${data.features ? Object.keys(data.features).join(', ') : 'N/A'}
+
+📋 Sample Message:
+${data.messages && data.messages[0] ? JSON.stringify(data.messages[0], null, 2) : 'No messages found'}
+
+📋 Function Details:
+- Status: ${response.status} ${response.statusText}
+- Total Messages: ${data.totalMessages || 0}`;
+                
+            } catch (error) {
+                updateStatus('chat', 'offline', 'Failed');
+                resultDiv.innerHTML = `<span class="error">❌ Real-Time Chat Test FAILED</span>
+                
+🚨 Error Details:
+- Message: ${error.message}
+- Type: ${error.name}
+
+💡 Possible Issues:
+- Function not deployed yet
+- WebSocket service unavailable
+- Chat service error`;
+            }
+        }
+        
+        async function testAnalytics() {
+            const resultDiv = document.getElementById('analytics-result');
+            updateStatus('analytics', 'testing', 'Testing...');
+            resultDiv.innerHTML = '<span class="info">📊 Testing Analytics function...</span>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/analytics?type=overview`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                updateStatus('analytics', 'online', 'Working');
+                resultDiv.innerHTML = `<span class="success">✅ Analytics Test PASSED</span>
+                
+📊 Report Type: ${data.reportType || 'overview'}
+💕 Love Score: ${data.data && data.data.summary ? data.data.summary.loveScore : 'N/A'}
+⏰ Total Time: ${data.data && data.data.summary ? data.data.summary.totalTimeSpent : 'N/A'}
+🎯 Relationship Health: ${data.data && data.data.summary ? data.data.summary.relationshipHealth : 'N/A'}
+📈 Growth Trend: ${data.data && data.data.summary ? data.data.summary.growthTrend : 'N/A'}
+
+📋 Insights:
+${data.data && data.data.insights ? data.data.insights.slice(0, 2).join('\n') : 'No insights available'}
+
+📋 Function Details:
+- Status: ${response.status} ${response.statusText}
+- Generated At: ${data.generatedAt || 'N/A'}
+- Features: ${data.features ? Object.keys(data.features).join(', ') : 'N/A'}`;
+                
+            } catch (error) {
+                updateStatus('analytics', 'offline', 'Failed');
+                resultDiv.innerHTML = `<span class="error">❌ Analytics Test FAILED</span>
+                
+🚨 Error Details:
+- Message: ${error.message}
+- Type: ${error.name}
+
+💡 Possible Issues:
+- Function not deployed yet
+- Analytics service unavailable
+- Data processing error`;
+            }
+        }
+        
+        async function runAllTests() {
+            const resultDiv = document.getElementById('all-results');
+            resultDiv.innerHTML = '<span class="info">🚀 Running complete test suite...</span>';
+            
+            const tests = [
+                { name: 'AI Oracle', test: testAIOracle },
+                { name: 'User Auth', test: testUserAuth },
+                { name: 'Cloud Storage', test: testCloudStorage },
+                { name: 'Real-Time Chat', test: testRealTimeChat },
+                { name: 'Analytics', test: testAnalytics }
+            ];
+            
+            let results = [];
+            
+            for (const { name, test } of tests) {
+                try {
+                    await test();
+                    results.push(`✅ ${name}: PASSED`);
+                } catch (error) {
+                    results.push(`❌ ${name}: FAILED - ${error.message}`);
+                }
+                
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            const passedCount = results.filter(r => r.includes('PASSED')).length;
+            const totalCount = results.length;
+            
+            resultDiv.innerHTML = `<span class="${passedCount === totalCount ? 'success' : 'error'}">
+🎯 Test Suite Complete: ${passedCount}/${totalCount} functions working</span>
+
+📋 Results:
+${results.join('\n')}
+
+${passedCount === totalCount ? 
+    '🎉 ALL FUNCTIONS WORKING! Your full-stack app is ready for deployment!' : 
+    '⚠️ Some functions need attention. Check individual test results above.'}
+
+💡 Next Steps:
+${passedCount === totalCount ? 
+    '- Deploy to GitHub and Netlify\n- Share your amazing app\n- Enjoy all the full-stack features!' :
+    '- Fix any failing functions\n- Re-run tests\n- Deploy when all tests pass'}`;
+        }
+        
+        // Auto-run a quick connectivity test on load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Backend Functions Test Suite Ready');
+            console.log(`🌐 Testing environment: ${LOCAL_MODE ? 'Local' : 'Production'}`);
+            console.log(`🔗 API Base: ${API_BASE}`);
+        });
+    </script>
+</body>
+</html>
